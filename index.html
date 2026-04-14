@@ -24,7 +24,7 @@
     #stars-canvas { position: fixed; top:0; left:0; width:100%; height:100%; z-index:0; }
     #solar-system { position: fixed; top:50%; left:50%; transform-origin:0 0; z-index:1; width:0; height:0; will-change:transform; }
 
-    .orbit { position:absolute; border:1px solid rgba(255,255,255,0.06); border-radius:50%; top:50%; left:50%; transform:translate(-50%,-50%); pointer-events:none; }
+    .orbit { position:absolute; border:1px solid rgba(255,255,255,0.22); border-radius:50%; top:50%; left:50%; transform:translate(-50%,-50%); pointer-events:none; }
     .belt { position:absolute; border-radius:50%; top:50%; left:50%; transform:translate(-50%,-50%); pointer-events:none; }
     .asteroid-belt { border:8px dotted rgba(160,140,110,0.12); }
     .kuiper-belt { border:14px dotted rgba(100,130,170,0.08); }
@@ -645,46 +645,46 @@ function t(obj) { return typeof obj === 'string' ? obj : (obj[lang] || obj.en); 
 
 // ==================== PLANET CONFIG (with hi-res textures) ====================
 const planetConfig = [
-  { id:'mercury', radius:90, size:10,
+  { id:'mercury', radius:100, size:10,
     style:'background: radial-gradient(circle at 25% 25%, rgba(255,255,255,0.3) 0%, transparent 30%), radial-gradient(circle at 60% 55%, rgba(100,90,80,0.4) 0%, transparent 15%), radial-gradient(circle at 40% 70%, rgba(100,90,80,0.3) 0%, transparent 12%), radial-gradient(circle at 30% 30%, #c8baa8, #a89880, #887868, #605548); border-radius:50%;',
     shadow:'0 0 6px rgba(160,140,120,0.3), inset -4px -4px 8px rgba(0,0,0,0.5)', speed:18, startAngle:45 },
-  { id:'venus', radius:130, size:15,
+  { id:'venus', radius:155, size:15,
     style:'background: radial-gradient(circle at 25% 25%, rgba(255,255,230,0.35) 0%, transparent 30%), radial-gradient(ellipse at 50% 40%, rgba(230,200,140,0.3) 0%, transparent 50%), radial-gradient(ellipse at 55% 65%, rgba(200,160,80,0.3) 0%, transparent 40%), radial-gradient(circle at 30% 30%, #f0dcc0, #e8c898, #d4a860, #c08830); border-radius:50%;',
     shadow:'0 0 12px rgba(220,180,100,0.15), inset -5px -5px 10px rgba(0,0,0,0.35)', speed:30, startAngle:160 },
-  { id:'earth', radius:180, size:18,
+  { id:'earth', radius:230, size:18,
     style:'background: radial-gradient(circle at 22% 22%, rgba(255,255,255,0.45) 0%, transparent 25%), radial-gradient(ellipse at 45% 35%, rgba(50,130,50,0.7) 0%, transparent 30%), radial-gradient(ellipse at 70% 55%, rgba(50,120,50,0.5) 0%, transparent 25%), radial-gradient(ellipse at 35% 65%, rgba(50,130,50,0.4) 0%, transparent 20%), radial-gradient(circle at 55% 25%, rgba(255,255,255,0.2) 0%, transparent 30%), radial-gradient(circle at 30% 30%, #80c0e8, #4090c0, #2868a0, #1a4a70); border-radius:50%;',
     shadow:'0 0 14px rgba(60,140,200,0.2), inset -5px -5px 10px rgba(0,0,0,0.35)', speed:40, startAngle:270 },
-  { id:'mars', radius:230, size:13,
+  { id:'mars', radius:355, size:13,
     style:'background: radial-gradient(circle at 22% 22%, rgba(255,200,150,0.4) 0%, transparent 25%), radial-gradient(ellipse at 50% 15%, rgba(220,200,190,0.6) 0%, transparent 20%), radial-gradient(ellipse at 45% 50%, rgba(160,80,30,0.3) 0%, transparent 30%), radial-gradient(circle at 30% 30%, #e0a070, #c07040, #a05028, #783018); border-radius:50%;',
     shadow:'0 0 8px rgba(200,100,50,0.2), inset -4px -4px 9px rgba(0,0,0,0.4)', speed:55, startAngle:30 },
-  { id:'jupiter', radius:320, size:36,
+  { id:'jupiter', radius:570, size:36,
     style:'background: radial-gradient(circle at 22% 22%, rgba(255,255,230,0.2) 0%, transparent 25%), radial-gradient(ellipse at 65% 58%, rgba(180,80,40,0.5) 10%, transparent 22%), linear-gradient(180deg, #d8c8a0 0%, #c8a878 6%, #e0c890 10%, #d0a060 16%, #c89848 20%, #d8b870 26%, #c08838 33%, #d8a860 38%, #b87828 42%, #c89040 46%, #e8b860 50%, #c89848 54%, #b07030 57%, #d8a050 62%, #c89040 68%, #d8b868 74%, #c8a050 80%, #b88838 86%, #d0b068 92%, #c8a048 100%); border-radius:50%;',
     shadow:'0 0 25px rgba(200,160,100,0.15), inset -8px -8px 18px rgba(0,0,0,0.35)', speed:80, startAngle:200 },
-  { id:'saturn', radius:410, size:30, hasRings:true,
+  { id:'saturn', radius:790, size:30, hasRings:true,
     style:'background: radial-gradient(circle at 22% 22%, rgba(255,240,200,0.25) 0%, transparent 25%), linear-gradient(180deg, #e8d8b0 0%, #d8c090 12%, #e0c898 22%, #d0b070 38%, #c8a858 50%, #d8b878 62%, #c8a050 78%, #d8c088 92%); border-radius:50%;',
     shadow:'0 0 20px rgba(200,170,100,0.15), inset -7px -7px 14px rgba(0,0,0,0.3)', speed:120, startAngle:100 },
-  { id:'uranus', radius:490, size:22, hasUranusRings:true,
+  { id:'uranus', radius:990, size:22, hasUranusRings:true,
     style:'background: radial-gradient(circle at 22% 22%, rgba(200,255,255,0.35) 0%, transparent 25%), radial-gradient(ellipse at 50% 50%, rgba(130,210,220,0.2) 0%, transparent 60%), radial-gradient(circle at 30% 30%, #b0e8f0, #80c8d8, #60a8c0, #4088a0); border-radius:50%;',
     shadow:'0 0 16px rgba(100,180,200,0.15), inset -6px -6px 12px rgba(0,0,0,0.3)', speed:160, startAngle:310 },
-  { id:'neptune', radius:560, size:20,
+  { id:'neptune', radius:1160, size:20,
     style:'background: radial-gradient(circle at 22% 22%, rgba(150,180,255,0.35) 0%, transparent 25%), radial-gradient(ellipse at 55% 45%, rgba(80,120,200,0.3) 0%, transparent 40%), radial-gradient(circle at 30% 30%, #6090e0, #3868c8, #2050b0, #183898); border-radius:50%;',
     shadow:'0 0 16px rgba(50,80,180,0.2), inset -6px -6px 12px rgba(0,0,0,0.4)', speed:200, startAngle:60 }
 ];
 
 const dwarfPlanetConfigs = [
-  { id:'ceres', radius:274, size:5,
+  { id:'ceres', radius:450, size:5,
     style:'background: radial-gradient(circle at 25% 25%, rgba(255,255,255,0.3) 0%, transparent 30%), radial-gradient(circle at 30% 30%, #b8b0a0, #908878, #686050, #484030); border-radius:50%;',
     shadow:'0 0 3px rgba(180,160,140,0.2), inset -2px -2px 4px rgba(0,0,0,0.4)', speed:60, startAngle:250 },
-  { id:'pluto', radius:620, size:8,
+  { id:'pluto', radius:1290, size:8,
     style:'background: radial-gradient(circle at 22% 22%, rgba(240,220,200,0.3) 0%, transparent 25%), radial-gradient(ellipse at 48% 48%, rgba(200,170,140,0.4) 0%, transparent 35%), radial-gradient(circle at 30% 30%, #d8c8b8, #b8a898, #988878, #786858); border-radius:50%;',
     shadow:'0 0 4px rgba(180,160,140,0.2), inset -3px -3px 5px rgba(0,0,0,0.35)', speed:250, startAngle:170 },
-  { id:'haumea', radius:660, size:6,
+  { id:'haumea', radius:1390, size:6,
     style:'background: radial-gradient(circle at 25% 25%, rgba(255,255,255,0.5) 0%, transparent 30%), radial-gradient(circle at 30% 30%, #f0f0f0, #c8c8c8, #989898, #686868); border-radius:50%;',
     shadow:'0 0 4px rgba(200,200,200,0.25), inset -2px -2px 5px rgba(0,0,0,0.35)', speed:280, startAngle:40 },
-  { id:'makemake', radius:695, size:6,
+  { id:'makemake', radius:1480, size:6,
     style:'background: radial-gradient(circle at 25% 25%, rgba(255,220,180,0.35) 0%, transparent 30%), radial-gradient(circle at 30% 30%, #c89068, #986040, #683820, #381808); border-radius:50%;',
     shadow:'0 0 4px rgba(180,100,60,0.2), inset -2px -2px 5px rgba(0,0,0,0.4)', speed:310, startAngle:320 },
-  { id:'eris', radius:735, size:7,
+  { id:'eris', radius:1570, size:7,
     style:'background: radial-gradient(circle at 25% 25%, rgba(255,255,255,0.55) 0%, transparent 30%), radial-gradient(circle at 30% 30%, #ffffff, #d8d8e0, #a0a0a8, #686870); border-radius:50%;',
     shadow:'0 0 5px rgba(200,200,220,0.3), inset -2px -2px 5px rgba(0,0,0,0.3)', speed:360, startAngle:110 }
 ];
@@ -704,7 +704,7 @@ let tx=0, ty=0, scale=1, baseScale=1;
 const MIN_SF=0.8, MAX_SF=25;
 let infoShowing=false, orbitsPaused=false, focusedId=null;
 
-function getBaseScale() { return Math.min(window.innerWidth, window.innerHeight) / 1400; }
+function getBaseScale() { return Math.min(window.innerWidth, window.innerHeight) / 3400; }
 function isMobile() { return window.innerWidth <= 600; }
 
 function applyTransform() {
@@ -726,9 +726,9 @@ function getRotationAngle(el) {
 planetConfig.forEach(p => {
   const o = document.createElement('div'); o.className='orbit'; o.style.width=o.style.height=`${p.radius*2}px`; solarSystem.appendChild(o);
 });
-dwarfPlanetConfigs.forEach(dp => { const o=document.createElement('div'); o.className='orbit'; o.style.width=o.style.height=`${dp.radius*2}px`; o.style.borderColor='rgba(255,255,255,0.03)'; solarSystem.appendChild(o); });
+dwarfPlanetConfigs.forEach(dp => { const o=document.createElement('div'); o.className='orbit'; o.style.width=o.style.height=`${dp.radius*2}px`; o.style.borderColor='rgba(255,255,255,0.10)'; solarSystem.appendChild(o); });
 
-const abSize=274, kbSize=640;
+const abSize=450, kbSize=1230;
 const abEl = document.createElement('div'); abEl.className='belt asteroid-belt'; abEl.style.width=abEl.style.height=`${abSize*2}px`; abEl.style.cursor='pointer'; abEl.style.pointerEvents='auto'; solarSystem.appendChild(abEl);
 const abLbl = document.createElement('div'); abLbl.className='belt-label'; abLbl.style.top=`calc(50% - ${abSize}px - 14px)`; abLbl.style.left='50%'; abLbl.style.transform='translateX(-50%)'; solarSystem.appendChild(abLbl); allBeltLabels.push({el:abLbl, key:'asteroidBeltLabel'});
 const kbEl = document.createElement('div'); kbEl.className='belt kuiper-belt'; kbEl.style.width=kbEl.style.height=`${kbSize*2}px`; kbEl.style.cursor='pointer'; kbEl.style.pointerEvents='auto'; solarSystem.appendChild(kbEl);
