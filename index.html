@@ -4,6 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Solar System Explorer</title>
+  <script type="importmap">
+  { "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js" } }
+  </script>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700&display=swap');
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -30,35 +33,27 @@
       position:absolute; width:80px; height:80px; border-radius:50%;
       top:50%; left:50%; transform:translate(-50%,-50%);
       cursor:pointer; z-index:100;
-      background:
-        radial-gradient(circle at 25% 25%, rgba(255,255,255,0.4) 0%, transparent 30%),
-        radial-gradient(circle at 50% 50%, #fff9e6 0%, #ffe566 15%, #ffcc00 30%, #ff9900 55%, #ff6600 75%, #cc3300 100%);
-      box-shadow: 0 0 40px rgba(255,200,50,0.6), 0 0 80px rgba(255,150,0,0.3), 0 0 120px rgba(255,100,0,0.15), inset -8px -8px 20px rgba(200,80,0,0.4);
-      animation: sun-pulse 4s ease-in-out infinite;
-    }
-    @keyframes sun-pulse {
-      0%,100% { box-shadow:0 0 40px rgba(255,200,50,0.6),0 0 80px rgba(255,150,0,0.3),0 0 120px rgba(255,100,0,0.15),inset -8px -8px 20px rgba(200,80,0,0.4); }
-      50% { box-shadow:0 0 50px rgba(255,200,50,0.7),0 0 100px rgba(255,150,0,0.4),0 0 150px rgba(255,100,0,0.2),inset -8px -8px 20px rgba(200,80,0,0.4); }
+      background:transparent;
     }
     .sun .label { position:absolute; bottom:-22px; left:50%; font-size:11px; font-weight:600; letter-spacing:1px; text-transform:uppercase; color:rgba(255,220,100,0.8); white-space:nowrap; }
 
     .planet-orbit { position:absolute; top:50%; left:50%; width:0; height:0; z-index:50; }
     @keyframes orbit { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
 
-    .planet { position:absolute; border-radius:50%; cursor:pointer; transition:filter 0.3s; transform:translate(-50%,-50%); }
-    .planet:hover { filter:brightness(1.15); z-index:200; }
+    .planet { position:absolute; border-radius:50%; cursor:pointer; transition:filter 0.3s; transform:translate(-50%,-50%); background:transparent !important; box-shadow:none !important; }
+    .planet:hover { filter:none; z-index:200; }
     .planet .label { position:absolute; bottom:-20px; left:50%; font-size:9px; font-weight:600; letter-spacing:0.8px; text-transform:uppercase; color:rgba(255,255,255,0.6); white-space:nowrap; transform-origin:center top; }
     .planet:hover .label { color:rgba(255,255,255,0.9); }
 
-    .dwarf-planet { position:absolute; border-radius:50%; cursor:pointer; transition:filter 0.3s; transform:translate(-50%,-50%); }
-    .dwarf-planet:hover { filter:brightness(1.15); }
+    .dwarf-planet { position:absolute; border-radius:50%; cursor:pointer; transition:filter 0.3s; transform:translate(-50%,-50%); background:transparent !important; box-shadow:none !important; }
+    .dwarf-planet:hover { filter:none; }
     .dwarf-planet .label { position:absolute; bottom:-16px; left:50%; font-size:8px; font-weight:600; letter-spacing:0.8px; text-transform:uppercase; color:rgba(255,255,255,0.5); white-space:nowrap; transform-origin:center top; }
 
-    .saturn-rings { position:absolute; width:200%; height:50%; top:50%; left:50%; transform:translate(-50%,-50%) rotateX(75deg); border:3px solid rgba(210,190,150,0.4); border-radius:50%; pointer-events:none; }
+    .saturn-rings { display:none; position:absolute; width:200%; height:50%; top:50%; left:50%; transform:translate(-50%,-50%) rotateX(75deg); border:3px solid rgba(210,190,150,0.4); border-radius:50%; pointer-events:none; }
     .saturn-rings::after { content:''; position:absolute; width:85%; height:85%; top:50%; left:50%; transform:translate(-50%,-50%); border:2px solid rgba(210,190,150,0.25); border-radius:50%; }
     .saturn-rings::before { content:''; position:absolute; width:115%; height:115%; top:50%; left:50%; transform:translate(-50%,-50%); border:1.5px solid rgba(210,190,150,0.15); border-radius:50%; }
 
-    .uranus-rings { position:absolute; width:55%; height:180%; top:50%; left:50%; transform:translate(-50%,-50%) rotateY(15deg); border:2px solid rgba(150,210,230,0.25); border-radius:50%; pointer-events:none; }
+    .uranus-rings { display:none; position:absolute; width:55%; height:180%; top:50%; left:50%; transform:translate(-50%,-50%) rotateY(15deg); border:2px solid rgba(150,210,230,0.25); border-radius:50%; pointer-events:none; }
     .uranus-rings::after { content:''; position:absolute; width:80%; height:90%; top:50%; left:50%; transform:translate(-50%,-50%); border:1.5px solid rgba(150,210,230,0.15); border-radius:50%; }
 
     #info-panel {
@@ -131,6 +126,7 @@
 </head>
 <body>
   <canvas id="stars-canvas"></canvas>
+  <canvas id="three-canvas" style="position:fixed;top:0;left:0;width:100%;height:100%;z-index:2;pointer-events:none;"></canvas>
   <div id="title">Our Solar System</div>
   <div id="solar-system"></div>
   <div id="info-panel"></div>
@@ -151,7 +147,9 @@
   <div id="hint"></div>
   <div id="dedication">For my son Noe, be curious and adventurous.</div>
 
-<script>
+<script type="module">
+import * as THREE from 'three';
+
 // ==================== STARS ====================
 const starsCanvas = document.getElementById('stars-canvas');
 const sctx = starsCanvas.getContext('2d');
@@ -164,6 +162,327 @@ function initStars() {
 }
 function resizeStars() { starsCanvas.width=window.innerWidth; starsCanvas.height=window.innerHeight; initStars(); }
 resizeStars();
+
+// ==================== THREE.JS SCENE ====================
+const threeCanvas = document.getElementById('three-canvas');
+const renderer = new THREE.WebGLRenderer({ canvas: threeCanvas, alpha: true, antialias: true, premultipliedAlpha: false });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.setSize(window.innerWidth, window.innerHeight, false);
+renderer.setClearColor(0x000000, 0);
+const scene = new THREE.Scene();
+const camera = new THREE.OrthographicCamera(-window.innerWidth/2, window.innerWidth/2, window.innerHeight/2, -window.innerHeight/2, 1, 20000);
+camera.position.z = 5000;
+
+function resizeThree() {
+  const w = window.innerWidth, h = window.innerHeight;
+  camera.left = -w/2; camera.right = w/2; camera.top = h/2; camera.bottom = -h/2;
+  camera.updateProjectionMatrix();
+  renderer.setSize(w, h, false);
+}
+
+// Procedural radial-glow texture for the sun corona (sprite-based "fake bloom")
+function makeGlowTexture() {
+  const size = 256;
+  const cvs = document.createElement('canvas');
+  cvs.width = cvs.height = size;
+  const ctx = cvs.getContext('2d');
+  const grad = ctx.createRadialGradient(size/2, size/2, 0, size/2, size/2, size/2);
+  grad.addColorStop(0.00, 'rgba(255,240,180,1.0)');
+  grad.addColorStop(0.10, 'rgba(255,220,140,0.85)');
+  grad.addColorStop(0.25, 'rgba(255,180, 80,0.45)');
+  grad.addColorStop(0.50, 'rgba(255,150, 50,0.18)');
+  grad.addColorStop(0.80, 'rgba(255,120, 30,0.05)');
+  grad.addColorStop(1.00, 'rgba(255,100, 20,0.00)');
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, size, size);
+  const t = new THREE.CanvasTexture(cvs);
+  t.colorSpace = THREE.SRGBColorSpace;
+  return t;
+}
+
+// Lighting: sun point light + low ambient
+const sunLight = new THREE.PointLight(0xffffff, 2.5, 0, 0);
+sunLight.position.set(0, 0, 200);
+scene.add(sunLight);
+scene.add(new THREE.AmbientLight(0xffffff, 0.18));
+
+// Texture loader — color maps get sRGB, data maps (bump/normal/roughness) stay linear
+const texLoader = new THREE.TextureLoader();
+function loadColor(url) { const t = texLoader.load(url); t.colorSpace = THREE.SRGBColorSpace; return t; }
+function loadData(url)  { return texLoader.load(url); }
+
+const tex = {
+  sun:            loadColor('textures/sun.jpg'),
+  mercury:        loadColor('textures/mercury.jpg'),
+  mercuryBump:    loadData ('textures/mercury-bump.jpg'),
+  venus:          loadColor('textures/venus_surface.jpg'),
+  venusBump:      loadData ('textures/venus-bump.jpg'),
+  earth:          loadColor('textures/earth_daymap.jpg'),
+  earthNormal:    loadData ('textures/earth_normal.jpg'),
+  earthSpecular:  loadData ('textures/earth_specular.jpg'),
+  earthBump:      loadData ('textures/earth-bump.jpg'),
+  mars:           loadColor('textures/mars.jpg'),
+  marsBump:       loadData ('textures/mars-bump.jpg'),
+  jupiter:        loadColor('textures/jupiter.jpg'),
+  saturn:         loadColor('textures/saturn.jpg'),
+  saturnRing:     loadColor('textures/saturn_ring.png'),
+  uranus:         loadColor('textures/uranus.jpg'),
+  neptune:        loadColor('textures/neptune.jpg'),
+  // Dwarf planets
+  pluto:          loadColor('textures/pluto.jpg'),
+  plutoBump:      loadData ('textures/pluto_bump.jpg'),
+  ceres:          loadColor('textures/ceres_fictional.jpg'),
+  haumea:         loadColor('textures/haumea_fictional.jpg'),
+  makemake:       loadColor('textures/makemake_fictional.jpg'),
+  eris:           loadColor('textures/eris_fictional.jpg'),
+  // Moons
+  moon:           loadColor('textures/moon.jpg'),
+  moonBump:       loadData ('textures/moon-bump.jpg'),
+  phobos:         loadColor('textures/phobos.jpg'),
+  deimos:         loadColor('textures/deimos.jpg'),
+  io:             loadColor('textures/io.jpg'),
+  europa:         loadColor('textures/europa.jpg'),
+  ganymede:       loadColor('textures/ganymede.jpg'),
+  callisto:       loadColor('textures/callisto.jpg'),
+  titan:          loadColor('textures/titan.png'),
+  enceladus:      loadColor('textures/enceladus.jpg'),
+  mimas:          loadColor('textures/mimas.jpg'),
+  rhea:           loadColor('textures/rhea.jpg'),
+  iapetus:        loadColor('textures/iapetus.jpg'),
+  titania:        loadColor('textures/titania.jpg'),
+  oberon:         loadColor('textures/oberon.jpg'),
+  ariel:          loadColor('textures/ariel.jpg'),
+  umbriel:        loadColor('textures/umbriel.jpg'),
+  triton:         loadColor('textures/triton.jpg'),
+  proteus:        loadColor('textures/proteus.jpg'),
+  charon:         loadColor('textures/charon.jpg'),
+};
+
+// Meshes keyed by planet id
+const meshes = {};
+const sphereGeo = new THREE.SphereGeometry(1, 64, 64);
+
+function makeStandard(map, opts = {}) {
+  return new THREE.MeshStandardMaterial({ map, roughness: 0.95, metalness: 0.0, ...opts });
+}
+
+// Sun — emissive, no lighting needed.
+meshes.sun = new THREE.Mesh(sphereGeo, new THREE.MeshBasicMaterial({ map: tex.sun, color: 0xffffff }));
+scene.add(meshes.sun);
+// Sun glow sprite: large additive halo behind the sun mesh, sells the "bloom" look without post-processing
+const sunGlowMat = new THREE.SpriteMaterial({
+  map: makeGlowTexture(),
+  color: 0xffeeaa,
+  blending: THREE.AdditiveBlending,
+  transparent: true,
+  depthWrite: false,
+  depthTest: false,
+});
+const sunGlow = new THREE.Sprite(sunGlowMat);
+sunGlow.scale.set(6, 6, 1); // 3x sun radius — sun is 1 unit, sprite spans 6 units across
+meshes.sun.add(sunGlow);
+// Inner brighter halo for extra punch
+const sunGlowInner = new THREE.Sprite(new THREE.SpriteMaterial({
+  map: sunGlowMat.map, color: 0xffffff,
+  blending: THREE.AdditiveBlending, transparent: true,
+  depthWrite: false, depthTest: false, opacity: 0.7,
+}));
+sunGlowInner.scale.set(2.6, 2.6, 1);
+meshes.sun.add(sunGlowInner);
+
+// Terrestrial + gas planets
+meshes.mercury = new THREE.Mesh(sphereGeo, makeStandard(tex.mercury, { bumpMap: tex.mercuryBump, bumpScale: 0.02 }));
+meshes.venus   = new THREE.Mesh(sphereGeo, makeStandard(tex.venus,   { bumpMap: tex.venusBump,   bumpScale: 0.015 }));
+meshes.earth   = new THREE.Mesh(sphereGeo, new THREE.MeshStandardMaterial({
+  map: tex.earth, normalMap: tex.earthNormal, roughnessMap: tex.earthSpecular,
+  bumpMap: tex.earthBump, bumpScale: 0.015, roughness: 0.9, metalness: 0.0
+}));
+meshes.mars    = new THREE.Mesh(sphereGeo, makeStandard(tex.mars, { bumpMap: tex.marsBump, bumpScale: 0.025 }));
+meshes.jupiter = new THREE.Mesh(sphereGeo, makeStandard(tex.jupiter));
+meshes.saturn  = new THREE.Mesh(sphereGeo, makeStandard(tex.saturn));
+meshes.uranus  = new THREE.Mesh(sphereGeo, makeStandard(tex.uranus));
+meshes.neptune = new THREE.Mesh(sphereGeo, makeStandard(tex.neptune));
+['mercury','venus','earth','mars','jupiter','saturn','uranus','neptune'].forEach(id => scene.add(meshes[id]));
+
+// Saturn rings
+const ringGeo = new THREE.RingGeometry(1.4, 2.3, 128);
+// Fix UVs so the texture maps radially
+{
+  const pos = ringGeo.attributes.position;
+  const uv = ringGeo.attributes.uv;
+  for (let i = 0; i < pos.count; i++) {
+    const r = Math.hypot(pos.getX(i), pos.getY(i));
+    const u = (r - 1.4) / (2.3 - 1.4);
+    uv.setXY(i, u, 0.5);
+  }
+}
+const ringMat = new THREE.MeshBasicMaterial({ map: tex.saturnRing, side: THREE.DoubleSide, transparent: true, opacity: 0.9 });
+const saturnRing = new THREE.Mesh(ringGeo, ringMat);
+saturnRing.rotation.x = Math.PI * 0.48;
+meshes.saturn.add(saturnRing);
+
+// Uranus rings — procedural canvas texture mimicking real Uranian ring structure:
+// several narrow dark bands (ε, δ, γ, β, α, 4, 5, 6) separated by gaps.
+function makeUranusRingTexture() {
+  const cvs = document.createElement('canvas');
+  cvs.width = 1024; cvs.height = 2;
+  const ctx = cvs.getContext('2d');
+  ctx.fillStyle = 'rgba(0,0,0,0)';
+  ctx.fillRect(0, 0, cvs.width, cvs.height);
+  // Inner radius = 0 in u, outer = 1. Real rings are clustered in outer ~30% of the visible band.
+  // Bands defined as [center, width, alpha]
+  const bands = [
+    [0.06, 0.010, 0.55], // 6
+    [0.11, 0.010, 0.55], // 5
+    [0.17, 0.012, 0.60], // 4
+    [0.27, 0.014, 0.65], // α
+    [0.34, 0.014, 0.65], // β
+    [0.46, 0.008, 0.50], // η
+    [0.52, 0.010, 0.55], // γ
+    [0.60, 0.012, 0.60], // δ
+    [0.78, 0.006, 0.35], // λ (faint)
+    [0.92, 0.040, 0.85], // ε (brightest, widest)
+  ];
+  bands.forEach(([c, w, a]) => {
+    const x0 = (c - w/2) * cvs.width;
+    const x1 = (c + w/2) * cvs.width;
+    const grad = ctx.createLinearGradient(x0, 0, x1, 0);
+    grad.addColorStop(0,   `rgba(70,70,75,0)`);
+    grad.addColorStop(0.5, `rgba(110,105,100,${a})`);
+    grad.addColorStop(1,   `rgba(70,70,75,0)`);
+    ctx.fillStyle = grad;
+    ctx.fillRect(x0, 0, x1 - x0, cvs.height);
+  });
+  const t = new THREE.CanvasTexture(cvs);
+  t.colorSpace = THREE.SRGBColorSpace;
+  t.wrapS = t.wrapT = THREE.ClampToEdgeWrapping;
+  return t;
+}
+tex.uranusRing = makeUranusRingTexture();
+
+const uRingGeo = new THREE.RingGeometry(1.55, 2.05, 192);
+{
+  const pos = uRingGeo.attributes.position;
+  const uv = uRingGeo.attributes.uv;
+  for (let i = 0; i < pos.count; i++) {
+    const r = Math.hypot(pos.getX(i), pos.getY(i));
+    const u = (r - 1.55) / (2.05 - 1.55);
+    uv.setXY(i, u, 0.5);
+  }
+}
+const uRingMat = new THREE.MeshBasicMaterial({
+  map: tex.uranusRing, side: THREE.DoubleSide,
+  transparent: true, opacity: 0.9, depthWrite: false
+});
+const uranusRing = new THREE.Mesh(uRingGeo, uRingMat);
+// Uranus is tipped ~98°, so its ring plane is nearly perpendicular to the ecliptic.
+uranusRing.rotation.x = Math.PI * 0.5;
+uranusRing.rotation.z = Math.PI * 0.05;
+meshes.uranus.add(uranusRing);
+// Tilt Uranus itself so day/night lighting matches the tipped axis.
+meshes.uranus.rotation.z = Math.PI * 0.05;
+
+// Dwarf planets — real color maps (Pluto has a real bump map; others are fictional)
+meshes.pluto    = new THREE.Mesh(sphereGeo, makeStandard(tex.pluto, { bumpMap: tex.plutoBump, bumpScale: 0.025 }));
+meshes.ceres    = new THREE.Mesh(sphereGeo, makeStandard(tex.ceres));
+meshes.haumea   = new THREE.Mesh(sphereGeo, makeStandard(tex.haumea));
+meshes.makemake = new THREE.Mesh(sphereGeo, makeStandard(tex.makemake));
+meshes.eris     = new THREE.Mesh(sphereGeo, makeStandard(tex.eris));
+['pluto','ceres','haumea','makemake','eris'].forEach(id => scene.add(meshes[id]));
+// Haumea is an elongated ellipsoid, not a sphere — squash it for fun.
+meshes.haumea.scale.set(1, 1, 1); // base scale, per-frame sync sets actual size
+// Note: per-frame setScalar will overwrite this. We instead embed the squash by using a separate scale path below.
+
+// Procedural texture for tiny moons that have no published photographic maps
+// (Hi'iaka, Namaka, MK2, Dysnomia). Generates a cratered/mottled equirectangular map.
+function makeProceduralMoonTexture(seed, baseRGB) {
+  const W = 512, H = 256;
+  const cvs = document.createElement('canvas');
+  cvs.width = W; cvs.height = H;
+  const ctx = cvs.getContext('2d');
+  // Seeded PRNG
+  let s = seed;
+  const rnd = () => { s = (s * 9301 + 49297) % 233280; return s / 233280; };
+  const [br, bg, bb] = baseRGB;
+  // Base fill
+  ctx.fillStyle = `rgb(${br},${bg},${bb})`;
+  ctx.fillRect(0, 0, W, H);
+  // Large mottled patches
+  for (let i = 0; i < 80; i++) {
+    const x = rnd() * W, y = rnd() * H;
+    const r = 12 + rnd() * 50;
+    const shade = (rnd() - 0.5) * 60;
+    const grad = ctx.createRadialGradient(x, y, 0, x, y, r);
+    grad.addColorStop(0, `rgba(${br+shade|0},${bg+shade|0},${bb+shade|0},0.55)`);
+    grad.addColorStop(1, `rgba(${br},${bg},${bb},0)`);
+    ctx.fillStyle = grad;
+    ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill();
+  }
+  // Craters: dark interior + bright rim
+  for (let i = 0; i < 140; i++) {
+    const x = rnd() * W, y = rnd() * H;
+    const r = 2 + rnd() * 14;
+    // Dark floor
+    const dark = ctx.createRadialGradient(x, y, 0, x, y, r);
+    dark.addColorStop(0,   `rgba(${br*0.55|0},${bg*0.55|0},${bb*0.55|0},0.85)`);
+    dark.addColorStop(0.7, `rgba(${br*0.7|0},${bg*0.7|0},${bb*0.7|0},0.25)`);
+    dark.addColorStop(1,   `rgba(${br},${bg},${bb},0)`);
+    ctx.fillStyle = dark;
+    ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill();
+    // Bright rim
+    ctx.strokeStyle = `rgba(${Math.min(255,br+50)},${Math.min(255,bg+50)},${Math.min(255,bb+50)},0.55)`;
+    ctx.lineWidth = 0.8;
+    ctx.beginPath(); ctx.arc(x, y, r * 0.95, 0, Math.PI * 2); ctx.stroke();
+  }
+  // Fine speckle noise
+  const img = ctx.getImageData(0, 0, W, H);
+  for (let i = 0; i < img.data.length; i += 4) {
+    const n = (rnd() - 0.5) * 28;
+    img.data[i]   = Math.max(0, Math.min(255, img.data[i]   + n));
+    img.data[i+1] = Math.max(0, Math.min(255, img.data[i+1] + n));
+    img.data[i+2] = Math.max(0, Math.min(255, img.data[i+2] + n));
+  }
+  ctx.putImageData(img, 0, 0);
+  const t = new THREE.CanvasTexture(cvs);
+  t.colorSpace = THREE.SRGBColorSpace;
+  return t;
+}
+
+// Generate procedural maps for the four moons that lack real photographic textures
+tex.hiiaka   = makeProceduralMoonTexture(11731, [220, 222, 226]); // icy white
+tex.namaka   = makeProceduralMoonTexture(53921, [205, 208, 215]); // icy white
+tex.mk2      = makeProceduralMoonTexture(78113, [ 95,  88,  82]); // dark rocky
+tex.dysnomia = makeProceduralMoonTexture(24609, [180, 182, 188]); // mid grey
+
+// Moons — texture lookup by english name
+const moonTextureByName = {
+  'Moon':      { map: tex.moon, bumpMap: tex.moonBump, bumpScale: 0.02 },
+  'Phobos':    { map: tex.phobos },
+  'Deimos':    { map: tex.deimos },
+  'Io':        { map: tex.io },
+  'Europa':    { map: tex.europa },
+  'Ganymede':  { map: tex.ganymede },
+  'Callisto':  { map: tex.callisto },
+  'Titan':     { map: tex.titan },
+  'Enceladus': { map: tex.enceladus },
+  'Mimas':     { map: tex.mimas },
+  'Rhea':      { map: tex.rhea },
+  'Iapetus':   { map: tex.iapetus },
+  'Titania':   { map: tex.titania },
+  'Oberon':    { map: tex.oberon },
+  'Ariel':     { map: tex.ariel },
+  'Umbriel':   { map: tex.umbriel },
+  'Triton':    { map: tex.triton },
+  'Proteus':   { map: tex.proteus },
+  'Charon':    { map: tex.charon },
+  // Procedural for moons with no published photographic maps
+  'Hiʻiaka':   { map: tex.hiiaka },
+  'Namaka':    { map: tex.namaka },
+  'MK2':       { map: tex.mk2 },
+  'Dysnomia':  { map: tex.dysnomia },
+};
+
+const moonMeshes = [];
 
 // ==================== i18n DATA ====================
 let lang = 'en';
@@ -452,12 +771,21 @@ function buildMoons(ms, moons, pw) {
     const ring = document.createElement('div'); ring.className='moon-orbit-ring'; ring.style.width=ring.style.height=`${moon.orbitRadius*2}px`; ms.appendChild(ring);
     const mw = document.createElement('div'); mw.className='moon-orbit-wrapper'; mw.style.animationDuration=`${moon.speed}s`;
     const el = document.createElement('div'); el.className='moon';
-    el.style.width=el.style.height=`${moon.size}px`; el.style.background=moon.gradient;
+    el.style.width=el.style.height=`${moon.size}px`; el.style.background='transparent';
     el.style.top=`${-moon.orbitRadius}px`; el.style.left='0';
-    el.style.boxShadow=`inset -${moon.size/4}px -${moon.size/4}px ${moon.size/2}px rgba(0,0,0,0.45)`;
     const ml = document.createElement('span'); ml.className='moon-label'; el.appendChild(ml);
     allMoonLabels.push({ el:ml, getPlanetAngle:()=>getRotationAngle(pw), getMoonAngle:()=>getRotationAngle(mw), moonData:moon });
     mw.appendChild(el); ms.appendChild(mw);
+    // Three.js moon mesh — look up texture by english name
+    const moonName = moon.name && moon.name.en;
+    const texInfo = moonTextureByName[moonName];
+    const moonMat = texInfo
+      ? new THREE.MeshStandardMaterial({ ...texInfo, roughness: 0.95, metalness: 0.0 })
+      : new THREE.MeshStandardMaterial({ color: 0xaaaaaa, roughness: 0.95 });
+    const mesh = new THREE.Mesh(sphereGeo, moonMat);
+    mesh.visible = false;
+    scene.add(mesh);
+    moonMeshes.push({ mesh, el });
   });
 }
 
@@ -502,6 +830,49 @@ function updateLabels() {
   requestAnimationFrame(updateLabels);
 }
 requestAnimationFrame(updateLabels);
+
+// ==================== THREE.JS RENDER LOOP ====================
+function syncMeshToElement(mesh, el) {
+  if (!mesh || !el) return;
+  const rect = el.getBoundingClientRect();
+  if (rect.width === 0) { mesh.visible = false; return; }
+  mesh.visible = true;
+  const cx = rect.left + rect.width/2 - window.innerWidth/2;
+  const cy = -(rect.top + rect.height/2 - window.innerHeight/2);
+  mesh.position.set(cx, cy, 0);
+  mesh.scale.setScalar(rect.width / 2);
+}
+
+function renderThree() {
+  // Sun first, place light at sun center
+  const sunEl = document.querySelector('.sun');
+  if (sunEl) {
+    syncMeshToElement(meshes.sun, sunEl);
+    meshes.sun.rotation.y += 0.0008;
+    sunLight.position.copy(meshes.sun.position);
+    sunLight.position.z = 200;
+  }
+  // Planets
+  Object.values(planetElements).forEach(({ el, config }) => {
+    const mesh = meshes[config.id];
+    if (!mesh) return;
+    syncMeshToElement(mesh, el);
+    mesh.rotation.y += 0.003;
+    // Haumea is highly elongated — squash after sync
+    if (config.id === 'haumea' && mesh.visible) {
+      const s = mesh.scale.x;
+      mesh.scale.set(s * 1.35, s * 0.75, s * 0.8);
+    }
+  });
+  // Moons
+  moonMeshes.forEach(({ mesh, el }) => {
+    syncMeshToElement(mesh, el);
+    mesh.rotation.y += 0.005;
+  });
+  renderer.render(scene, camera);
+  requestAnimationFrame(renderThree);
+}
+requestAnimationFrame(renderThree);
 
 // ==================== MOON VISIBILITY ====================
 function updateMoonVisibility() {
@@ -690,6 +1061,7 @@ function initView() {
   if (window.innerWidth <= 0 || window.innerHeight <= 0) return;
   baseScale = getBaseScale(); scale = baseScale; tx=0; ty=0; applyTransform();
   resizeStars();
+  resizeThree();
   viewInitialized = true;
 }
 initView();
@@ -704,6 +1076,7 @@ window.addEventListener('resize', ()=>{
   baseScale = getBaseScale();
   if (wasAtBase) { scale = baseScale; tx=0; ty=0; applyTransform(); }
   resizeStars();
+  resizeThree();
 });
 
 // ==================== MUSIC (very gentle wind chimes) ====================
