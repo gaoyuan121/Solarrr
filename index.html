@@ -89,6 +89,26 @@
     .moon .moon-label { position:absolute; bottom:-14px; left:50%; font-size:7px; font-weight:600; letter-spacing:0.6px; text-transform:uppercase; color:rgba(255,255,255,0.45); white-space:nowrap; transform-origin:center top; }
     .moon:hover .moon-label { color:rgba(255,255,255,0.8); }
 
+    #nav-list {
+      position:fixed; left:24px; top:50%; transform:translateY(-50%);
+      background:rgba(10,10,30,0.55); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+      border:1px solid rgba(255,255,255,0.08); border-radius:14px;
+      padding:8px; z-index:1000;
+      max-height:82vh; overflow-y:auto;
+      display:flex; flex-direction:column; gap:1px;
+    }
+    #nav-list::-webkit-scrollbar { width:4px; }
+    #nav-list::-webkit-scrollbar-thumb { background:rgba(255,255,255,0.15); border-radius:2px; }
+    .nav-item { display:flex; align-items:center; gap:10px; padding:5px 10px 5px 6px; cursor:pointer; border-radius:8px; transition:background 0.2s; min-width:118px; }
+    .nav-item:hover { background:rgba(255,255,255,0.08); }
+    .nav-item.active { background:rgba(255,255,255,0.14); }
+    .nav-item-icon { width:18px; height:18px; border-radius:50%; flex-shrink:0; box-shadow:inset -2px -2px 4px rgba(0,0,0,0.4); }
+    .nav-item-name { font-size:10px; font-weight:600; letter-spacing:0.6px; color:rgba(255,255,255,0.65); text-transform:uppercase; white-space:nowrap; }
+    .nav-item:hover .nav-item-name { color:rgba(255,255,255,0.95); }
+    .nav-item.active .nav-item-name { color:rgba(255,255,255,1); }
+    .nav-divider { height:1px; background:rgba(255,255,255,0.08); margin:4px 8px; }
+    @media (max-width:600px) { #nav-list { display:none; } }
+
     #dedication { position:fixed; bottom:24px; right:32px; font-size:12px; font-weight:300; color:rgba(255,255,255,0.45); letter-spacing:0.5px; font-style:italic; z-index:999; }
     #hint { position:fixed; bottom:24px; left:50%; transform:translateX(-50%); font-size:11px; color:rgba(255,255,255,0.2); letter-spacing:1px; z-index:999; transition:opacity 0.5s; white-space:nowrap; }
     #title { position:fixed; top:28px; left:50%; transform:translateX(-50%); font-size:14px; font-weight:300; letter-spacing:4px; text-transform:uppercase; color:rgba(255,255,255,0.2); z-index:999; white-space:nowrap; }
@@ -143,6 +163,8 @@
     <svg id="sound-on-icon" viewBox="0 0 24 24" style="display:none"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
     <svg id="sound-off-icon" viewBox="0 0 24 24"><path d="M11 5L6 9H2v6h4l5 4V5z"/><line x1="22" y1="9" x2="16" y2="15"/><line x1="16" y1="9" x2="22" y2="15"/></svg>
   </div>
+
+  <div id="nav-list"></div>
 
   <div id="hint"></div>
   <div id="dedication">For my son Noe, be curious and adventurous.</div>
@@ -645,46 +667,46 @@ function t(obj) { return typeof obj === 'string' ? obj : (obj[lang] || obj.en); 
 
 // ==================== PLANET CONFIG (with hi-res textures) ====================
 const planetConfig = [
-  { id:'mercury', radius:100, size:10,
+  { id:'mercury', radius:95, size:10,
     style:'background: radial-gradient(circle at 25% 25%, rgba(255,255,255,0.3) 0%, transparent 30%), radial-gradient(circle at 60% 55%, rgba(100,90,80,0.4) 0%, transparent 15%), radial-gradient(circle at 40% 70%, rgba(100,90,80,0.3) 0%, transparent 12%), radial-gradient(circle at 30% 30%, #c8baa8, #a89880, #887868, #605548); border-radius:50%;',
     shadow:'0 0 6px rgba(160,140,120,0.3), inset -4px -4px 8px rgba(0,0,0,0.5)', speed:18, startAngle:45 },
-  { id:'venus', radius:155, size:15,
+  { id:'venus', radius:135, size:15,
     style:'background: radial-gradient(circle at 25% 25%, rgba(255,255,230,0.35) 0%, transparent 30%), radial-gradient(ellipse at 50% 40%, rgba(230,200,140,0.3) 0%, transparent 50%), radial-gradient(ellipse at 55% 65%, rgba(200,160,80,0.3) 0%, transparent 40%), radial-gradient(circle at 30% 30%, #f0dcc0, #e8c898, #d4a860, #c08830); border-radius:50%;',
     shadow:'0 0 12px rgba(220,180,100,0.15), inset -5px -5px 10px rgba(0,0,0,0.35)', speed:30, startAngle:160 },
-  { id:'earth', radius:230, size:18,
+  { id:'earth', radius:185, size:18,
     style:'background: radial-gradient(circle at 22% 22%, rgba(255,255,255,0.45) 0%, transparent 25%), radial-gradient(ellipse at 45% 35%, rgba(50,130,50,0.7) 0%, transparent 30%), radial-gradient(ellipse at 70% 55%, rgba(50,120,50,0.5) 0%, transparent 25%), radial-gradient(ellipse at 35% 65%, rgba(50,130,50,0.4) 0%, transparent 20%), radial-gradient(circle at 55% 25%, rgba(255,255,255,0.2) 0%, transparent 30%), radial-gradient(circle at 30% 30%, #80c0e8, #4090c0, #2868a0, #1a4a70); border-radius:50%;',
     shadow:'0 0 14px rgba(60,140,200,0.2), inset -5px -5px 10px rgba(0,0,0,0.35)', speed:40, startAngle:270 },
-  { id:'mars', radius:355, size:13,
+  { id:'mars', radius:245, size:13,
     style:'background: radial-gradient(circle at 22% 22%, rgba(255,200,150,0.4) 0%, transparent 25%), radial-gradient(ellipse at 50% 15%, rgba(220,200,190,0.6) 0%, transparent 20%), radial-gradient(ellipse at 45% 50%, rgba(160,80,30,0.3) 0%, transparent 30%), radial-gradient(circle at 30% 30%, #e0a070, #c07040, #a05028, #783018); border-radius:50%;',
     shadow:'0 0 8px rgba(200,100,50,0.2), inset -4px -4px 9px rgba(0,0,0,0.4)', speed:55, startAngle:30 },
-  { id:'jupiter', radius:570, size:36,
+  { id:'jupiter', radius:345, size:36,
     style:'background: radial-gradient(circle at 22% 22%, rgba(255,255,230,0.2) 0%, transparent 25%), radial-gradient(ellipse at 65% 58%, rgba(180,80,40,0.5) 10%, transparent 22%), linear-gradient(180deg, #d8c8a0 0%, #c8a878 6%, #e0c890 10%, #d0a060 16%, #c89848 20%, #d8b870 26%, #c08838 33%, #d8a860 38%, #b87828 42%, #c89040 46%, #e8b860 50%, #c89848 54%, #b07030 57%, #d8a050 62%, #c89040 68%, #d8b868 74%, #c8a050 80%, #b88838 86%, #d0b068 92%, #c8a048 100%); border-radius:50%;',
     shadow:'0 0 25px rgba(200,160,100,0.15), inset -8px -8px 18px rgba(0,0,0,0.35)', speed:80, startAngle:200 },
-  { id:'saturn', radius:790, size:30, hasRings:true,
+  { id:'saturn', radius:450, size:30, hasRings:true,
     style:'background: radial-gradient(circle at 22% 22%, rgba(255,240,200,0.25) 0%, transparent 25%), linear-gradient(180deg, #e8d8b0 0%, #d8c090 12%, #e0c898 22%, #d0b070 38%, #c8a858 50%, #d8b878 62%, #c8a050 78%, #d8c088 92%); border-radius:50%;',
     shadow:'0 0 20px rgba(200,170,100,0.15), inset -7px -7px 14px rgba(0,0,0,0.3)', speed:120, startAngle:100 },
-  { id:'uranus', radius:990, size:22, hasUranusRings:true,
+  { id:'uranus', radius:540, size:22, hasUranusRings:true,
     style:'background: radial-gradient(circle at 22% 22%, rgba(200,255,255,0.35) 0%, transparent 25%), radial-gradient(ellipse at 50% 50%, rgba(130,210,220,0.2) 0%, transparent 60%), radial-gradient(circle at 30% 30%, #b0e8f0, #80c8d8, #60a8c0, #4088a0); border-radius:50%;',
     shadow:'0 0 16px rgba(100,180,200,0.15), inset -6px -6px 12px rgba(0,0,0,0.3)', speed:160, startAngle:310 },
-  { id:'neptune', radius:1160, size:20,
+  { id:'neptune', radius:625, size:20,
     style:'background: radial-gradient(circle at 22% 22%, rgba(150,180,255,0.35) 0%, transparent 25%), radial-gradient(ellipse at 55% 45%, rgba(80,120,200,0.3) 0%, transparent 40%), radial-gradient(circle at 30% 30%, #6090e0, #3868c8, #2050b0, #183898); border-radius:50%;',
     shadow:'0 0 16px rgba(50,80,180,0.2), inset -6px -6px 12px rgba(0,0,0,0.4)', speed:200, startAngle:60 }
 ];
 
 const dwarfPlanetConfigs = [
-  { id:'ceres', radius:450, size:5,
+  { id:'ceres', radius:290, size:5,
     style:'background: radial-gradient(circle at 25% 25%, rgba(255,255,255,0.3) 0%, transparent 30%), radial-gradient(circle at 30% 30%, #b8b0a0, #908878, #686050, #484030); border-radius:50%;',
     shadow:'0 0 3px rgba(180,160,140,0.2), inset -2px -2px 4px rgba(0,0,0,0.4)', speed:60, startAngle:250 },
-  { id:'pluto', radius:1290, size:8,
+  { id:'pluto', radius:685, size:8,
     style:'background: radial-gradient(circle at 22% 22%, rgba(240,220,200,0.3) 0%, transparent 25%), radial-gradient(ellipse at 48% 48%, rgba(200,170,140,0.4) 0%, transparent 35%), radial-gradient(circle at 30% 30%, #d8c8b8, #b8a898, #988878, #786858); border-radius:50%;',
     shadow:'0 0 4px rgba(180,160,140,0.2), inset -3px -3px 5px rgba(0,0,0,0.35)', speed:250, startAngle:170 },
-  { id:'haumea', radius:1390, size:6,
+  { id:'haumea', radius:710, size:6,
     style:'background: radial-gradient(circle at 25% 25%, rgba(255,255,255,0.5) 0%, transparent 30%), radial-gradient(circle at 30% 30%, #f0f0f0, #c8c8c8, #989898, #686868); border-radius:50%;',
     shadow:'0 0 4px rgba(200,200,200,0.25), inset -2px -2px 5px rgba(0,0,0,0.35)', speed:280, startAngle:40 },
-  { id:'makemake', radius:1480, size:6,
+  { id:'makemake', radius:735, size:6,
     style:'background: radial-gradient(circle at 25% 25%, rgba(255,220,180,0.35) 0%, transparent 30%), radial-gradient(circle at 30% 30%, #c89068, #986040, #683820, #381808); border-radius:50%;',
     shadow:'0 0 4px rgba(180,100,60,0.2), inset -2px -2px 5px rgba(0,0,0,0.4)', speed:310, startAngle:320 },
-  { id:'eris', radius:1570, size:7,
+  { id:'eris', radius:760, size:7,
     style:'background: radial-gradient(circle at 25% 25%, rgba(255,255,255,0.55) 0%, transparent 30%), radial-gradient(circle at 30% 30%, #ffffff, #d8d8e0, #a0a0a8, #686870); border-radius:50%;',
     shadow:'0 0 5px rgba(200,200,220,0.3), inset -2px -2px 5px rgba(0,0,0,0.3)', speed:360, startAngle:110 }
 ];
@@ -704,7 +726,7 @@ let tx=0, ty=0, scale=1, baseScale=1;
 const MIN_SF=0.8, MAX_SF=25;
 let infoShowing=false, orbitsPaused=false, focusedId=null;
 
-function getBaseScale() { return Math.min(window.innerWidth, window.innerHeight) / 3400; }
+function getBaseScale() { return Math.min(window.innerWidth, window.innerHeight) / 1850; }
 function isMobile() { return window.innerWidth <= 600; }
 
 function applyTransform() {
@@ -728,7 +750,7 @@ planetConfig.forEach(p => {
 });
 dwarfPlanetConfigs.forEach(dp => { const o=document.createElement('div'); o.className='orbit'; o.style.width=o.style.height=`${dp.radius*2}px`; o.style.borderColor='rgba(255,255,255,0.10)'; solarSystem.appendChild(o); });
 
-const abSize=450, kbSize=1230;
+const abSize=290, kbSize=722;
 const abEl = document.createElement('div'); abEl.className='belt asteroid-belt'; abEl.style.width=abEl.style.height=`${abSize*2}px`; abEl.style.cursor='pointer'; abEl.style.pointerEvents='auto'; solarSystem.appendChild(abEl);
 const abLbl = document.createElement('div'); abLbl.className='belt-label'; abLbl.style.top=`calc(50% - ${abSize}px - 14px)`; abLbl.style.left='50%'; abLbl.style.transform='translateX(-50%)'; solarSystem.appendChild(abLbl); allBeltLabels.push({el:abLbl, key:'asteroidBeltLabel'});
 const kbEl = document.createElement('div'); kbEl.className='belt kuiper-belt'; kbEl.style.width=kbEl.style.height=`${kbSize*2}px`; kbEl.style.cursor='pointer'; kbEl.style.pointerEvents='auto'; solarSystem.appendChild(kbEl);
@@ -808,6 +830,27 @@ dwarfPlanetConfigs.forEach(dp => {
   planetElements[dp.id] = { el:e, wrapper:w, config:dp };
 });
 
+// ==================== NAV LIST ====================
+const navListEl = document.getElementById('nav-list');
+const navItems = [];
+function addNavItem(id, iconStyle) {
+  const item = document.createElement('div');
+  item.className = 'nav-item'; item.dataset.id = id;
+  const icon = document.createElement('div'); icon.className = 'nav-item-icon'; icon.style.cssText = iconStyle;
+  const name = document.createElement('span'); name.className = 'nav-item-name';
+  item.appendChild(icon); item.appendChild(name); navListEl.appendChild(item);
+  item.addEventListener('click', (e) => { e.stopPropagation(); zoomToTarget(id); });
+  navItems.push({ el:item, nameEl:name, id });
+}
+addNavItem('sun', 'background:radial-gradient(circle at 30% 30%, #fff5b0, #ffcc40, #ff8810, #d04010); box-shadow:0 0 6px rgba(255,180,40,0.6);');
+planetConfig.forEach(p => addNavItem(p.id, p.style));
+const navDiv = document.createElement('div'); navDiv.className = 'nav-divider'; navListEl.appendChild(navDiv);
+dwarfPlanetConfigs.forEach(dp => addNavItem(dp.id, dp.style));
+
+function updateNavActive() {
+  navItems.forEach(({ el, id }) => el.classList.toggle('active', id === focusedId));
+}
+
 // ==================== UPDATE TEXT FOR LANGUAGE ====================
 function updateAllText() {
   titleEl.textContent = t(i18n.title);
@@ -815,6 +858,7 @@ function updateAllText() {
   allLabels.forEach(({ el, dataKey }) => { el.textContent = t(solarData[dataKey].name); });
   allMoonLabels.forEach(({ el, moonData }) => { el.textContent = t(moonData.name); });
   allBeltLabels.forEach(({ el, key }) => { el.textContent = t(i18n[key]); });
+  navItems.forEach(({ nameEl, id }) => { nameEl.textContent = t(solarData[id].name); });
   if (infoShowing && focusedId) showInfo(focusedId);
 }
 updateAllText();
@@ -900,6 +944,7 @@ function animateTo(targetTx, targetTy, targetScale, duration, cb) {
 
 function goHome() {
   hideInfo(); resumeOrbits(); focusedId=null;
+  updateNavActive();
   animateTo(0, 0, baseScale, 800);
 }
 homeBtn.addEventListener('click', (e)=>{ e.stopPropagation(); goHome(); });
@@ -949,6 +994,7 @@ function showInfo(id) {
   infoPanel.innerHTML = html;
   infoPanel.classList.add('visible');
   infoShowing = true;
+  updateNavActive();
 }
 
 function hideInfo() { infoPanel.classList.remove('visible'); infoShowing=false; }
