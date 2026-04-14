@@ -279,6 +279,37 @@ const solarData = {
     funFact:{ en:'Pluto has a giant heart-shaped feature called Tombaugh Regio!', zh:'冥王星上有一个巨大的心形区域叫汤博区！' },
     moonData:[ { name:{en:'Charon',zh:'冥卫一'}, size:6, orbitRadius:40, speed:16, gradient:'radial-gradient(circle at 30% 30%, #b8b0b0, #908888, #706868)' } ]
   },
+  ceres: {
+    name:{ en:'Ceres', zh:'谷神星' }, subtitle:{ en:'Dwarf Planet', zh:'矮行星' },
+    diameter:'940 km', distFromSun:'414 M km', dayLength:{ en:'9 hours', zh:'9小时' }, yearLength:{ en:'4.6 Earth yrs', zh:'4.6个地球年' }, moons:0,
+    description:{ en:'Ceres is the biggest object in the asteroid belt — the only dwarf planet in the inner solar system! It may have a salty ocean under its icy surface.', zh:'谷神星是小行星带中最大的天体——内太阳系唯一的矮行星！它的冰冻表面下可能有一片咸咸的海洋。' },
+    funFact:{ en:'Ceres has bright white spots in a crater that are salty ice deposits!', zh:'谷神星上有明亮的白色斑点，那是陨石坑里的盐冰！' },
+    moonData:[]
+  },
+  haumea: {
+    name:{ en:'Haumea', zh:'妊神星' }, subtitle:{ en:'Dwarf Planet', zh:'矮行星' },
+    diameter:'1,632 km', distFromSun:'6.5 B km', dayLength:{ en:'4 hours', zh:'4小时' }, yearLength:{ en:'285 Earth yrs', zh:'285个地球年' }, moons:2,
+    description:{ en:'Haumea is shaped like an egg because it spins so fast! It even has its own tiny ring and two small moons.', zh:'妊神星因为自转得非常快，形状像一个鸡蛋！它甚至有自己的小环和两颗小卫星。' },
+    funFact:{ en:'A day on Haumea is only 4 hours — the fastest spin of any big object in the solar system!', zh:'妊神星上的一天只有4小时——是太阳系中大天体自转最快的！' },
+    moonData:[
+      { name:{en:'Hiʻiaka',zh:'妊卫一'}, size:4, orbitRadius:28, speed:16, gradient:'radial-gradient(circle at 30% 30%, #f0f0f0, #c0c0c0, #909090)' },
+      { name:{en:'Namaka',zh:'妊卫二'}, size:3, orbitRadius:40, speed:22, gradient:'radial-gradient(circle at 30% 30%, #e8e8e8, #b0b0b0, #808080)' }
+    ]
+  },
+  makemake: {
+    name:{ en:'Makemake', zh:'鸟神星' }, subtitle:{ en:'Dwarf Planet', zh:'矮行星' },
+    diameter:'1,430 km', distFromSun:'6.8 B km', dayLength:{ en:'22.8 hours', zh:'22.8小时' }, yearLength:{ en:'306 Earth yrs', zh:'306个地球年' }, moons:1,
+    description:{ en:'Makemake is a reddish-brown world in the Kuiper Belt, covered in frozen methane. It was named after a creation god from Easter Island!', zh:'鸟神星是柯伊伯带中一颗红棕色的世界，覆盖着冰冻的甲烷。它以复活节岛的创造之神命名！' },
+    funFact:{ en:'Makemake is one of the brightest objects in the Kuiper Belt!', zh:'鸟神星是柯伊伯带中最明亮的天体之一！' },
+    moonData:[ { name:{en:'MK2',zh:'鸟卫一'}, size:3, orbitRadius:32, speed:18, gradient:'radial-gradient(circle at 30% 30%, #808080, #585858, #383838)' } ]
+  },
+  eris: {
+    name:{ en:'Eris', zh:'阋神星' }, subtitle:{ en:'Dwarf Planet', zh:'矮行星' },
+    diameter:'2,326 km', distFromSun:'10.1 B km', dayLength:{ en:'25.9 hours', zh:'25.9小时' }, yearLength:{ en:'557 Earth yrs', zh:'557个地球年' }, moons:1,
+    description:{ en:'Eris lives far beyond the Kuiper Belt in a region called the scattered disk. It is almost the same size as Pluto but heavier!', zh:'阋神星住在柯伊伯带之外一个叫离散盘的区域。它和冥王星差不多大，但更重！' },
+    funFact:{ en:'Finding Eris is what caused Pluto to be reclassified as a dwarf planet in 2006!', zh:'阋神星的发现使冥王星在2006年被重新归类为矮行星！' },
+    moonData:[ { name:{en:'Dysnomia',zh:'阋卫一'}, size:4, orbitRadius:34, speed:18, gradient:'radial-gradient(circle at 30% 30%, #b0b0b0, #888888, #606060)' } ]
+  },
   asteroidBelt: {
     name:{ en:'Asteroid Belt', zh:'小行星带' }, subtitle:{ en:'Rocky Ring', zh:'岩石环带' },
     description:{ en:'Millions of rocky objects orbit between Mars and Jupiter, spread so far apart spacecraft fly through easily!', zh:'数百万岩石天体在火星和木星之间运行，分布非常稀疏，飞船可以轻松穿过！' },
@@ -321,9 +352,23 @@ const planetConfig = [
     shadow:'0 0 16px rgba(50,80,180,0.2), inset -6px -6px 12px rgba(0,0,0,0.4)', speed:200, startAngle:60 }
 ];
 
-const plutoConfig = { id:'pluto', radius:620, size:8,
-  style:'background: radial-gradient(circle at 22% 22%, rgba(240,220,200,0.3) 0%, transparent 25%), radial-gradient(ellipse at 48% 48%, rgba(200,170,140,0.4) 0%, transparent 35%), radial-gradient(circle at 30% 30%, #d8c8b8, #b8a898, #988878, #786858); border-radius:50%;',
-  shadow:'0 0 4px rgba(180,160,140,0.2), inset -3px -3px 5px rgba(0,0,0,0.35)', speed:250, startAngle:170 };
+const dwarfPlanetConfigs = [
+  { id:'ceres', radius:274, size:5,
+    style:'background: radial-gradient(circle at 25% 25%, rgba(255,255,255,0.3) 0%, transparent 30%), radial-gradient(circle at 30% 30%, #b8b0a0, #908878, #686050, #484030); border-radius:50%;',
+    shadow:'0 0 3px rgba(180,160,140,0.2), inset -2px -2px 4px rgba(0,0,0,0.4)', speed:60, startAngle:250 },
+  { id:'pluto', radius:620, size:8,
+    style:'background: radial-gradient(circle at 22% 22%, rgba(240,220,200,0.3) 0%, transparent 25%), radial-gradient(ellipse at 48% 48%, rgba(200,170,140,0.4) 0%, transparent 35%), radial-gradient(circle at 30% 30%, #d8c8b8, #b8a898, #988878, #786858); border-radius:50%;',
+    shadow:'0 0 4px rgba(180,160,140,0.2), inset -3px -3px 5px rgba(0,0,0,0.35)', speed:250, startAngle:170 },
+  { id:'haumea', radius:660, size:6,
+    style:'background: radial-gradient(circle at 25% 25%, rgba(255,255,255,0.5) 0%, transparent 30%), radial-gradient(circle at 30% 30%, #f0f0f0, #c8c8c8, #989898, #686868); border-radius:50%;',
+    shadow:'0 0 4px rgba(200,200,200,0.25), inset -2px -2px 5px rgba(0,0,0,0.35)', speed:280, startAngle:40 },
+  { id:'makemake', radius:695, size:6,
+    style:'background: radial-gradient(circle at 25% 25%, rgba(255,220,180,0.35) 0%, transparent 30%), radial-gradient(circle at 30% 30%, #c89068, #986040, #683820, #381808); border-radius:50%;',
+    shadow:'0 0 4px rgba(180,100,60,0.2), inset -2px -2px 5px rgba(0,0,0,0.4)', speed:310, startAngle:320 },
+  { id:'eris', radius:735, size:7,
+    style:'background: radial-gradient(circle at 25% 25%, rgba(255,255,255,0.55) 0%, transparent 30%), radial-gradient(circle at 30% 30%, #ffffff, #d8d8e0, #a0a0a8, #686870); border-radius:50%;',
+    shadow:'0 0 5px rgba(200,200,220,0.3), inset -2px -2px 5px rgba(0,0,0,0.3)', speed:360, startAngle:110 }
+];
 
 // ==================== STATE ====================
 const solarSystem = document.getElementById('solar-system');
@@ -362,7 +407,7 @@ function getRotationAngle(el) {
 planetConfig.forEach(p => {
   const o = document.createElement('div'); o.className='orbit'; o.style.width=o.style.height=`${p.radius*2}px`; solarSystem.appendChild(o);
 });
-const poe = document.createElement('div'); poe.className='orbit'; poe.style.width=poe.style.height=`${plutoConfig.radius*2}px`; poe.style.borderColor='rgba(255,255,255,0.03)'; solarSystem.appendChild(poe);
+dwarfPlanetConfigs.forEach(dp => { const o=document.createElement('div'); o.className='orbit'; o.style.width=o.style.height=`${dp.radius*2}px`; o.style.borderColor='rgba(255,255,255,0.03)'; solarSystem.appendChild(o); });
 
 const abSize=274, kbSize=640;
 const abEl = document.createElement('div'); abEl.className='belt asteroid-belt'; abEl.style.width=abEl.style.height=`${abSize*2}px`; abEl.style.cursor='pointer'; abEl.style.pointerEvents='auto'; solarSystem.appendChild(abEl);
@@ -418,17 +463,22 @@ function buildMoons(ms, moons, pw) {
 
 planetConfig.forEach(createPlanet);
 
-// Pluto
-const pw = document.createElement('div'); pw.className='planet-orbit'; pw.dataset.planetId='pluto';
-pw.style.animation=`orbit ${plutoConfig.speed}s linear infinite`; pw.style.animationDelay=`-${plutoConfig.startAngle/360*plutoConfig.speed}s`;
-const pe = document.createElement('div'); pe.className='dwarf-planet'; pe.dataset.id='pluto';
-pe.setAttribute('style', `position:absolute;cursor:pointer;border-radius:50%;transform:translate(-50%,-50%);width:${plutoConfig.size}px;height:${plutoConfig.size}px;top:${-plutoConfig.radius}px;left:0;box-shadow:${plutoConfig.shadow};${plutoConfig.style}`);
-const plbl = document.createElement('span'); plbl.className='label'; pe.appendChild(plbl);
-allLabels.push({ el:plbl, getAngle:()=>getRotationAngle(pw), dataKey:'pluto' });
-const pms = document.createElement('div'); pms.className='moon-system'; pms.dataset.planet='pluto';
-buildMoons(pms, solarData.pluto.moonData, pw); pe.appendChild(pms);
-pw.appendChild(pe); solarSystem.appendChild(pw);
-planetElements['pluto'] = { el:pe, wrapper:pw, config:plutoConfig };
+// Dwarf planets
+dwarfPlanetConfigs.forEach(dp => {
+  const w = document.createElement('div'); w.className='planet-orbit'; w.dataset.planetId=dp.id;
+  w.style.animation=`orbit ${dp.speed}s linear infinite`; w.style.animationDelay=`-${dp.startAngle/360*dp.speed}s`;
+  const e = document.createElement('div'); e.className='dwarf-planet'; e.dataset.id=dp.id;
+  e.setAttribute('style', `position:absolute;cursor:pointer;border-radius:50%;transform:translate(-50%,-50%);width:${dp.size}px;height:${dp.size}px;top:${-dp.radius}px;left:0;box-shadow:${dp.shadow};${dp.style}`);
+  const lbl = document.createElement('span'); lbl.className='label'; e.appendChild(lbl);
+  allLabels.push({ el:lbl, getAngle:()=>getRotationAngle(w), dataKey:dp.id });
+  const data = solarData[dp.id];
+  if (data.moonData && data.moonData.length > 0) {
+    const ms = document.createElement('div'); ms.className='moon-system'; ms.dataset.planet=dp.id;
+    buildMoons(ms, data.moonData, w); e.appendChild(ms);
+  }
+  w.appendChild(e); solarSystem.appendChild(w);
+  planetElements[dp.id] = { el:e, wrapper:w, config:dp };
+});
 
 // ==================== UPDATE TEXT FOR LANGUAGE ====================
 function updateAllText() {
@@ -516,7 +566,7 @@ langBtn.addEventListener('click', (e)=>{
 function showInfo(id) {
   const data = solarData[id]; if (!data) return;
   focusedId = id;
-  const accent = { sun:'#ffcc00', mercury:'#c2b5a3', venus:'#e8c898', earth:'#4898c8', mars:'#c87848', jupiter:'#d8b870', saturn:'#d0b068', uranus:'#80c8d8', neptune:'#5080d0', pluto:'#b8a898', asteroidBelt:'#a0937e', kuiperBelt:'#8098b0' }[id]||'#fff';
+  const accent = { sun:'#ffcc00', mercury:'#c2b5a3', venus:'#e8c898', earth:'#4898c8', mars:'#c87848', jupiter:'#d8b870', saturn:'#d0b068', uranus:'#80c8d8', neptune:'#5080d0', pluto:'#b8a898', ceres:'#a89680', haumea:'#e0e0e0', makemake:'#c08860', eris:'#d8d8e0', asteroidBelt:'#a0937e', kuiperBelt:'#8098b0' }[id]||'#fff';
 
   let html = `<h2 style="color:${accent}">${t(data.name)}</h2><div class="subtitle">${t(data.subtitle)}</div><div class="info-divider"></div>`;
   const facts = [[i18n.diameter,data.diameter],[i18n.fromSun,data.distFromSun],[i18n.type,data.type],[i18n.temperature,data.temperature],[i18n.age,data.age],[i18n.dayLength,data.dayLength],[i18n.yearLength,data.yearLength],[i18n.moonsLabel,data.moons!==undefined?data.moons:undefined]];
@@ -546,9 +596,8 @@ function zoomToTarget(id) {
   // else sun: localX=0, localY=0
 
   const cfg = entry ? entry.config : { size: 80 };
-  let zoomScale = Math.min(12, Math.max(3, 180 / cfg.size));
+  let zoomScale = Math.min(14, Math.max(3, 180 / cfg.size));
   if (id==='sun') zoomScale = 3;
-  if (id==='pluto') zoomScale = 14;
 
   const mob = isMobile();
   const panelOffX = mob ? 0 : -120;
@@ -636,8 +685,26 @@ document.addEventListener('keydown', (e)=>{
 });
 
 // ==================== INIT ====================
-baseScale = getBaseScale(); scale=baseScale; applyTransform();
-window.addEventListener('resize', ()=>{ baseScale=getBaseScale(); resizeStars(); });
+let viewInitialized = false;
+function initView() {
+  if (window.innerWidth <= 0 || window.innerHeight <= 0) return;
+  baseScale = getBaseScale(); scale = baseScale; tx=0; ty=0; applyTransform();
+  resizeStars();
+  viewInitialized = true;
+}
+initView();
+if (!viewInitialized) {
+  const ro = new ResizeObserver(() => { if (!viewInitialized) initView(); });
+  ro.observe(document.documentElement);
+  window.addEventListener('load', initView, { once: true });
+}
+window.addEventListener('resize', ()=>{
+  if (!viewInitialized) { initView(); return; }
+  const wasAtBase = Math.abs(scale - baseScale) < 0.01 && Math.abs(tx) < 5 && Math.abs(ty) < 5;
+  baseScale = getBaseScale();
+  if (wasAtBase) { scale = baseScale; tx=0; ty=0; applyTransform(); }
+  resizeStars();
+});
 
 // ==================== MUSIC (very gentle wind chimes) ====================
 let audioCtx=null, musicPlaying=false, masterGain=null, chimeTimer=null;
